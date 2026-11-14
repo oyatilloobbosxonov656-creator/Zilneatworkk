@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Zilnet</title>
+<meta name="theme-color" content="#1d4ed8">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="zilnet-192.png">
+<link rel="apple-touch-icon" href="zilnet-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Zilnet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f5f7;--surface:#fff;--ink:#12263a;--muted:#5b6b7a;--line:#d5dde4;--blue:#1d4ed8;--orange:#c2410c;--ok:#15803d;--bad:#b91c1c;--term:#10202e;--termink:#d9e6f2;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a26;--surface:#162636;--ink:#e6eef5;--muted:#9fb1c1;--line:#2a3d50;--blue:#6ea0ff;--orange:#fb923c;--ok:#4ade80;--bad:#f87171;--term:#07111a}}
+:root[data-theme="dark"]{--bg:#0e1a26;--surface:#162636;--ink:#e6eef5;--muted:#9fb1c1;--line:#2a3d50;--blue:#6ea0ff;--orange:#fb923c;--ok:#4ade80;--bad:#f87171;--term:#07111a}
+*{box-sizing:border-box}
+html{color-scheme:light dark}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{padding:20px 16px 8px;max-width:640px;margin:0 auto}
+h1{font:800 30px/1.1 "Bricolage Grotesque",system-ui,sans-serif;margin:0}
+h1 span{color:var(--orange)}
+header p{margin:6px 0 0;color:var(--muted)}
+main{max-width:640px;margin:0 auto;padding:8px 16px}
+section{display:none}
+section.on{display:block}
+h2{font:600 20px "Bricolage Grotesque",system-ui,sans-serif;margin:12px 0}
+input,button{font:inherit}
+input[type=text],input[type=search]{width:100%;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.item{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--blue);border-radius:8px;padding:12px 14px;margin:10px 0}
+.item b{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:17px}
+.item small{color:var(--muted);margin-left:8px}
+.item p{margin:4px 0 0}
+.opt{display:block;width:100%;text-align:left;padding:12px;margin:8px 0;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)}
+.opt.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,var(--surface))}
+.opt.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 15%,var(--surface))}
+.btn{padding:12px 18px;border:0;border-radius:8px;background:var(--blue);color:#fff;font-weight:600}
+:root[data-theme="dark"] .btn{color:#0e1a26}
+.muted{color:var(--muted)}
+.term{background:var(--term);color:var(--termink);font:14px/1.5 "IBM Plex Mono",ui-monospace,monospace;border-radius:8px;padding:12px;min-height:220px;max-height:50vh;overflow:auto;white-space:pre-wrap;word-break:break-word}
+.term .cmd{color:#7dd3fc}
+.row{display:flex;gap:8px;margin:8px 0}
+.row input{flex:1}
+.calc{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px;margin-top:16px}
+.calc pre{margin:8px 0 0;font:14px/1.6 "IBM Plex Mono",ui-monospace,monospace;white-space:pre-wrap}
+.xp{display:inline-block;margin-top:10px;padding:4px 12px;border-radius:999px;background:color-mix(in srgb,var(--orange) 18%,var(--surface));color:var(--orange);font-weight:600;font-size:14px}
+.bar{height:6px;background:var(--line);border-radius:3px;margin:8px 0}.bar i{display:block;height:100%;background:var(--blue);border-radius:3px}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;padding:14px 4px;border:0;background:none;color:var(--muted);font-weight:600}
+nav button.on{color:var(--blue);box-shadow:inset 0 3px 0 var(--blue)}
+</style>
+</head>
+<body>
+<header>
+<h1>Zil<span>net</span></h1>
+<p>Kompyuter tarmoqlari va IT servisni telefonda oʻrganing.</p>
+<div class="xp" id="xp"></div>
+</header>
+<main>
+<section id="s0" class="on">
+<h2>Bilimlar bazasi</h2>
+<input type="search" id="q" placeholder="Qidirish: IP, DNS, router…">
+<div id="kb"></div>
+</section>
+<section id="s1">
+<h2>Test</h2>
+<div id="quiz"></div>
+</section>
+<section id="s2">
+<h2>Virtual laboratoriya</h2>
+<div class="term" id="out"></div>
+<div class="row"><input type="text" id="cmd" placeholder="Buyruq yozing: help" autocapitalize="off" autocomplete="off" spellcheck="false"><button class="btn" id="run">Bajarish</button></div>
+<div class="calc">
+<b>Subnet kalkulyatori</b>
+<div class="row"><input type="text" id="ip" placeholder="192.168.1.10"><input type="text" id="pf" placeholder="/24" style="max-width:90px"></div>
+<button class="btn" id="calc">Hisoblash</button>
+<pre id="res" class="muted">Natija shu yerda chiqadi.</pre>
+</div>
+</section>
+<section id="s3">
+<h2>Tarmoq qurish</h2>
+<p id="lvt" class="muted"></p>
+<svg id="net" viewBox="0 0 340 240" style="width:100%;background:var(--surface);border:1px solid var(--line);border-radius:8px"></svg>
+<p class="muted">Ketma-ket ikki qurilmaga bosing: kabel ulanadi. Yana bossangiz, kabel olinadi.</p>
+<div class="row"><button class="btn" id="png">Ping yuborish</button><button class="btn" id="rst">Tozalash</button><button class="btn" id="nx" hidden>Keyingi bosqich</button></div>
+<p id="msg"></p>
+</section>
+</main>
+<nav>
+<button class="on" data-t="0">Bilim</button>
+<button data-t="1">Test</button>
+<button data-t="2">Laboratoriya</button>
+<button data-t="3">Qurish</button>
+</nav>
+<script>
+var KB=[
+{t:"IP manzil",g:"Asos",d:"IPv4 manzil 32 bitdan iborat va 4 ta oktetda yoziladi, masalan 192.168.1.10. U qurilmani tarmoqda aniqlaydi."},
+{t:"Subnet maska",g:"Asos",d:"IP manzilning tarmoq va host qismini ajratadi. /24 prefiks 255.255.255.0 maskaga teng."},
+{t:"OSI modeli",g:"Asos",d:"7 qatlam: fizik, kanal, tarmoq, transport, seans, taqdimot, ilova. Har qatlam oʻz vazifasini bajaradi."},
+{t:"Router",g:"Qurilma",d:"Turli tarmoqlarni bogʻlaydi va paketlarga IP manzil boʻyicha yoʻl tanlaydi."},
+{t:"Switch",g:"Qurilma",d:"Bitta tarmoq ichidagi qurilmalarni MAC manzil asosida bogʻlaydi."},
+{t:"DNS",g:"Xizmat",d:"Domen nomini (masalan google.com) IP manzilga aylantiradi."},
+{t:"DHCP",g:"Xizmat",d:"Tarmoqqa ulangan qurilmalarga IP manzilni avtomatik beradi."},
+{t:"Gateway",g:"Asos",d:"Lokal tarmoqdan tashqariga chiqish eshigi. Odatda router manzili."},
+{t:"MAC manzil",g:"Asos",d:"48 bitli jismoniy manzil. Tarmoq kartasiga ishlab chiqaruvchi beradi, masalan 00:1A:2B:3C:4D:5E."},
+{t:"Private IP",g:"Manzillash",d:"Lokal tarmoq uchun: 10.0.0.0/8, 172.16.0.0/12 va 192.168.0.0/16. Internetda yoʻnaltirilmaydi."},
+{t:"Public IP",g:"Manzillash",d:"Internetda noyob boʻlgan manzil. Uni internet provayder beradi."},
+{t:"Loopback",g:"Manzillash",d:"127.0.0.1 qurilmaning oʻzini bildiradi. Tarmoq sozlamasini oʻz kompyuteringizda tekshirishga yordam beradi."},
+{t:"APIPA",g:"Manzillash",d:"DHCP server topilmasa, qurilma oʻziga 169.254.x.x manzilni beradi. Bu ulanishda muammo borligini bildiradi."},
+{t:"Broadcast manzil",g:"Manzillash",d:"Tarmoqdagi barcha qurilmalarga bir vaqtda yuborish manzili. Tarmoqning eng oxirgi manzili hisoblanadi."},
+{t:"IP sinflari",g:"Manzillash",d:"A sinf 1–126, B sinf 128–191, C sinf 192–223 bilan boshlanadi."},
+{t:"CIDR",g:"Manzillash",d:"Maskani prefiks bilan yozish usuli: /24, /16, /8. Qisqa va qulay."},
+{t:"Hostlar soni",g:"Manzillash",d:"Formula: 2^(32 − prefiks) − 2. Masalan /24 da 254 ta host boʻladi."},
+{t:"IPv6",g:"Manzillash",d:"128 bitli manzil, 8 guruh heksadetsimal koʻrinishda yoziladi. IPv4 yetishmasligi uchun yaratilgan."},
+{t:"NAT",g:"Xizmat",d:"Private IP manzillarni public IP ga aylantiradi. Shu tufayli koʻp qurilma bitta public IP bilan internetga chiqadi."},
+{t:"TCP",g:"Protokol",d:"Ishonchli protokol: ulanish oʻrnatadi va maʼlumot yetib borganini tekshiradi."},
+{t:"UDP",g:"Protokol",d:"Tez, lekin kafolatsiz protokol. Video qoʻngʻiroq va oʻyinlarda ishlatiladi."},
+{t:"Port raqamlari",g:"Protokol",d:"HTTP 80, HTTPS 443, SSH 22, DNS 53. Port xizmatni aniqlaydi."},
+{t:"ARP",g:"Protokol",d:"Berilgan IP manzilga mos MAC manzilni topadi."},
+{t:"Firewall",g:"Xavfsizlik",d:"Tarmoq trafigini qoidalar asosida ruxsat beradi yoki toʻsadi."},
+{t:"VLAN",g:"Tarmoq",d:"Bitta switch ichida tarmoqni mantiqiy qismlarga ajratadi. Masalan, oʻqituvchilar va talabalar tarmogʻi alohida boʻladi."},
+{t:"Wi-Fi",g:"Tarmoq",d:"Simsiz ulanish. 2.4 GHz uzoqroq masofaga yetadi, 5 GHz tezroq, lekin masofasi qisqaroq."},
+{t:"Access Point",g:"Qurilma",d:"Simsiz qurilmalarni simli tarmoqqa ulaydi va katta binolarda Wi-Fi qamrovini kengaytiradi."},
+{t:"UTP kabel",g:"Qurilma",d:"Eng keng tarqalgan tarmoq kabeli: 8 ta oʻtkazgich va RJ-45 ulagich. Cat5e va Cat6 turlari bor."},
+{t:"Topologiya",g:"Tarmoq",d:"Qurilmalarning ulanish shakli: yulduz, shina, halqa. Ofis tarmoqlarida koʻproq yulduz ishlatiladi."},
+{t:"LAN va WAN",g:"Tarmoq",d:"LAN bitta bino yoki xonadagi tarmoq. WAN shaharlar va davlatlarni bogʻlaydi, Internet eng katta WAN hisoblanadi."},
+{t:"ICMP",g:"Protokol",d:"Tarmoq xabarlari protokoli. ping va tracert buyruqlari shunga tayanadi."},
+{t:"HTTP va HTTPS",g:"Protokol",d:"Veb sahifalarni uzatadi. HTTPS maʼlumotni shifrlaydi, shuning uchun xavfsizroq."},
+{t:"SSH",g:"Protokol",d:"Qurilmani masofadan xavfsiz boshqarish protokoli. Standart porti 22."},
+{t:"VPN",g:"Xavfsizlik",d:"Shifrlangan tunnel orqali xavfsiz ulanish yaratadi, ayniqsa ommaviy Wi-Fi tarmoqlarida foydali."},
+{t:"TTL",g:"Protokol",d:"Paketning yashash muddati. Har bir routerdan oʻtganda 1 ga kamayadi, 0 boʻlsa paket tashlanadi."},
+{t:"Tezlik va kechikish",g:"Asos",d:"Tezlik Mbps bilan, kechikish (ping) ms bilan oʻlchanadi. Oʻyinlarda kechikish muhim."},
+{t:"Ikki bosqichli tasdiqlash",g:"Xavfsizlik",d:"Parolga qoʻshimcha kod talab qiladi. Parol oʻgʻirlansa ham, akkaunt himoyalangan qoladi."}
+];
+var QZ=[
+{q:"192.168.1.10/24 da maska qaysi?",o:["255.0.0.0","255.255.0.0","255.255.255.0","255.255.255.255"],a:2},
+{q:"OSI modelida nechta qatlam bor?",o:["4","5","7","9"],a:2},
+{q:"Domen nomini IP manzilga kim aylantiradi?",o:["DHCP","DNS","Switch","Gateway"],a:1},
+{q:"Qurilmalarga IP manzilni avtomatik kim beradi?",o:["DHCP","DNS","Router tabloi","MAC"],a:0},
+{q:"Switch qaysi manzil boʻyicha ishlaydi?",o:["IP","Domen","MAC","Port raqami"],a:2},
+{q:"Turli tarmoqlarni bogʻlovchi qurilma qaysi?",o:["Hub","Switch","Router","Repeater"],a:2},
+{q:"127.0.0.1 qaysi manzil?",o:["Broadcast","Loopback","Gateway","DNS server"],a:1},
+{q:"/24 tarmoqda nechta host manzili bor?",o:["256","254","255","252"],a:1},
+{q:"Qaysi manzil private hisoblanadi?",o:["8.8.8.8","172.16.5.4","200.10.1.1","11.0.0.1"],a:1},
+{q:"HTTPS standart porti qaysi?",o:["80","443","22","53"],a:1},
+{q:"IPv6 manzil necha bit?",o:["32","64","128","256"],a:2},
+{q:"IP manzildan MAC manzilni topadigan protokol qaysi?",o:["ARP","DNS","NAT","ICMP"],a:0},
+{q:"Tez, lekin kafolatsiz protokol qaysi?",o:["TCP","UDP","FTP","SSH"],a:1},
+{q:"Private IP ni public IP ga aylantiradigan xizmat qaysi?",o:["NAT","DHCP","DNS","ARP"],a:0},
+{q:"UTP kabelda nechta oʻtkazgich bor?",o:["2","4","8","16"],a:2},
+{q:"Ofis tarmoqlarida eng koʻp ishlatiladigan topologiya?",o:["Yulduz","Halqa","Shina","Hech biri"],a:0},
+{q:"SSH standart porti qaysi?",o:["21","22","23","25"],a:1},
+{q:"HTTPS ning HTTP dan farqi nima?",o:["Tezroq","Shifrlangan","Faqat telefonda","Bepul"],a:1},
+{q:"VLAN nima uchun ishlatiladi?",o:["Tarmoqni mantiqiy qismlarga ajratish","Internetni tezlashtirish","IP manzil berish","Kabel oʻrniga"],a:0},
+{q:"ping qaysi protokolga tayanadi?",o:["ICMP","ARP","DHCP","FTP"],a:0},
+{q:"5 GHz Wi-Fi ning xususiyati qaysi?",o:["Tezroq, lekin masofasi qisqaroq","Sekinroq, lekin uzoqroq","Faqat kabelda ishlaydi","2.4 GHz bilan bir xil"],a:0},
+{q:"LAN nima?",o:["Bitta bino ichidagi tarmoq","Butun dunyo tarmogʻi","Faqat Wi-Fi","Faqat server"],a:0}
+];
+var S={xp:0,best:0,done:{}};try{var _s=JSON.parse(localStorage.getItem('zilnet')||'{}');for(var _k in _s)S[_k]=_s[_k]}catch(e){}
+function save(){try{localStorage.setItem('zilnet',JSON.stringify(S))}catch(e){}}
+function lvl(){return S.xp>=300?'Mutaxassis':(S.xp>=120?'Amaliyotchi':'Yangi boshlovchi')}
+function showXp(){var e=document.getElementById('xp');if(e)e.textContent='Ball: '+S.xp+' · '+lvl()}
+function addXp(n){S.xp+=n;save();showXp()}
+function $(i){return document.getElementById(i)}
+document.querySelectorAll("nav button").forEach(function(b){b.onclick=function(){
+document.querySelectorAll("nav button").forEach(function(x){x.classList.remove("on")});
+document.querySelectorAll("section").forEach(function(x){x.classList.remove("on")});
+b.classList.add("on");$("s"+b.dataset.t).classList.add("on")}});
+function showKB(){var f=$("q").value.toLowerCase();
+$("kb").innerHTML=KB.filter(function(k){return (k.t+k.d).toLowerCase().indexOf(f)>-1}).map(function(k){
+return '<div class="item"><b>'+k.t+'</b><small>'+k.g+'</small><p>'+k.d+'</p></div>'}).join("")||'<p class="muted">Hech narsa topilmadi. Boshqa soʻz bilan qidiring.</p>'}
+$("q").oninput=showKB;showKB();
+var qi=0,sc=0;
+function showQ(){var e=$("quiz");
+if(qi>=QZ.length){if(sc>S.best){S.best=sc;save()}e.innerHTML='<p>Natija: <b>'+sc+' / '+QZ.length+'</b></p><p class="muted">Eng yaxshi natija: '+S.best+' / '+QZ.length+'</p><button class="btn" id="again">Qayta boshlash</button>';
+$("again").onclick=function(){qi=0;sc=0;showQ()};return}
+var x=QZ[qi];e.innerHTML='<p class="muted">Savol '+(qi+1)+' / '+QZ.length+'</p><div class="bar"><i style="width:'+Math.round(qi/QZ.length*100)+'%"></i></div><p><b>'+x.q+'</b></p>'+
+x.o.map(function(o,i){return '<button class="opt" data-i="'+i+'">'+o+'</button>'}).join("");
+e.querySelectorAll(".opt").forEach(function(b){b.onclick=function(){
+var i=+b.dataset.i;if(i===x.a){sc++;addXp(10)}
+e.querySelectorAll(".opt").forEach(function(c,j){c.disabled=true;if(j===x.a)c.classList.add("ok");else if(j===i)c.classList.add("bad")});
+var n=document.createElement("button");n.className="btn";n.textContent="Keyingi savol";n.style.marginTop="8px";
+n.onclick=function(){qi++;showQ()};e.appendChild(n)}})}
+showQ();
+var out=$("out");
+function say(t,c){var d=document.createElement("div");if(c)d.className=c;d.textContent=t;out.appendChild(d);out.scrollTop=out.scrollHeight}
+say("Zilnet terminali. Yordam uchun: help");
+var HOSTS={"192.168.1.1":1,"8.8.8.8":1,"google.com":1,"192.168.1.10":1};
+function run(){var v=$("cmd").value.trim();if(!v)return;$("cmd").value="";say("> "+v,"cmd");
+var p=v.split(/\s+/),c=p[0].toLowerCase();
+if(c==="help"){say("Buyruqlar: help, ipconfig, ping <manzil>, tracert <manzil>, nslookup <domen>, arp -a, netstat, clear")}
+else if(c==="clear"){out.innerHTML=""}
+else if(c==="ipconfig"){say("IPv4 manzil . . . : 192.168.1.10\nSubnet maska . . . : 255.255.255.0\nAsosiy shlyuz . . : 192.168.1.1")}
+else if(c==="ping"){if(!p[1]){say("Ishlatilishi: ping <manzil>");return}
+if(HOSTS[p[1]]){for(var i=0;i<4;i++)say("Javob "+p[1]+": vaqt="+(8+i*3)+"ms TTL=64");say("4 ta paket yuborildi, 4 ta qabul qilindi.")}
+else say("Soʻrov vaqti tugadi. Manzil topilmadi yoki yetib boʻlmaydi.")}
+else if(c==="tracert"){if(!p[1]){say("Ishlatilishi: tracert <manzil>");return}
+if(HOSTS[p[1]]){say("1  192.168.1.1  2 ms\n2  10.0.0.1  9 ms\n3  "+p[1]+"  14 ms\nYoʻl yakunlandi.")}else say("Manzilga yoʻl topilmadi.")}
+else if(c==="nslookup"){var DN={"google.com":"142.250.185.78","example.uz":"93.184.216.34"};if(!p[1]){say("Ishlatilishi: nslookup <domen>");return}
+if(DN[p[1]])say("Server: 192.168.1.1\nManzil: "+DN[p[1]]);else say("Domen topilmadi (NXDOMAIN).")}
+else if(c==="arp"){say("192.168.1.1   a4-2b-b0-11-22-33   dinamik\n192.168.1.20  f0-de-f1-44-55-66   dinamik")}
+else if(c==="netstat"){say("TCP  192.168.1.10:50123  142.250.185.78:443  ESTABLISHED\nTCP  192.168.1.10:50177  93.184.216.34:80  TIME_WAIT")}
+else say("Notanish buyruq. help deb yozing.")}
+$("run").onclick=run;$("cmd").onkeydown=function(e){if(e.key==="Enter")run()};
+function toIp(n){return [n>>>24,(n>>>16)&255,(n>>>8)&255,n&255].join(".")}
+$("calc").onclick=function(){var m=$("ip").value.trim().match(/^(\d+)\.(\d+)\.(\d+)\.(\d+)$/),
+f=parseInt($("pf").value.replace("/",""),10),r=$("res");
+if(!m||m.slice(1).some(function(x){return +x>255})||isNaN(f)||f<0||f>32){r.textContent="Xato: IP ni 192.168.1.10 koʻrinishida, prefiksni 0 dan 32 gacha kiriting.";return}
+var ip=((+m[1]<<24)|(+m[2]<<16)|(+m[3]<<8)|+m[4])>>>0,mask=f===0?0:(0xFFFFFFFF<<(32-f))>>>0,net=(ip&mask)>>>0,bc=(net|(~mask>>>0))>>>0,h=f>=31?0:Math.pow(2,32-f)-2;
+r.textContent="Maska:     "+toIp(mask)+"\nTarmoq:    "+toIp(net)+"\nBroadcast: "+toIp(bc)+"\nHostlar:   "+h}
+var LV=[
+{t:'1-bosqich',g:'PC1 dan PC2 ga ping oʻtkazing.',from:0,to:1,d:[{n:'PC1',k:'pc',ip:'192.168.1.10',x:70,y:50},{n:'PC2',k:'pc',ip:'192.168.1.11',x:270,y:50},{n:'Switch',k:'sw',x:170,y:160}]},
+{t:'2-bosqich',g:'PC1 dan Serverga ping oʻtkazing. Tarmoqlar har xil.',from:0,to:1,d:[{n:'PC1',k:'pc',ip:'192.168.1.10',x:70,y:40},{n:'Server',k:'pc',ip:'192.168.2.10',x:270,y:40},{n:'Switch A',k:'sw',x:70,y:180},{n:'Router',k:'rt',x:170,y:110},{n:'Switch B',k:'sw',x:270,y:180}]},
+{t:'3-bosqich',g:'PC1 ni ham ulang va PC2 dan Serverga ping oʻtkazing.',from:1,to:2,need:[0],d:[{n:'PC1',k:'pc',ip:'192.168.1.10',x:60,y:40},{n:'PC2',k:'pc',ip:'192.168.1.11',x:60,y:130},{n:'Server',k:'pc',ip:'192.168.2.10',x:275,y:40},{n:'Switch A',k:'sw',x:150,y:85},{n:'Router',k:'rt',x:215,y:175},{n:'Switch B',k:'sw',x:275,y:130}]}
+];
+var li=0,links=[],sel=null,NS='http://www.w3.org/2000/svg';
+function el(n,a){var e=document.createElementNS(NS,n);for(var k in a)e.setAttribute(k,a[k]);return e}
+function msg(h,c){var m=$('msg');m.textContent=h;m.style.color=c||'var(--ink)'}
+function loadLv(i){li=i;links=[];sel=null;$('nx').hidden=true;$('lvt').textContent=LV[i].t+'. '+LV[i].g;msg('');draw()}
+function draw(){var s=$('net'),d=LV[li].d;s.innerHTML='';
+links.forEach(function(l){var a=d[l[0]],b=d[l[1]];s.appendChild(el('line',{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:'#c2410c','stroke-width':3}))});
+d.forEach(function(o,i){var g=el('g',{}),c=el('circle',{cx:o.x,cy:o.y,r:26});
+c.style.fill=o.k==='rt'?'var(--orange)':o.k==='sw'?'var(--blue)':'var(--muted)';
+if(sel===i){c.style.stroke='var(--ink)';c.style.strokeWidth='4'}
+var t=el('text',{x:o.x,y:o.y+4,'text-anchor':'middle','font-size':12,'font-weight':700,fill:'#fff'});t.textContent=o.k==='pc'?'PC':o.k==='sw'?'SW':'R';
+var n=el('text',{x:o.x,y:o.y+44,'text-anchor':'middle','font-size':11});n.style.fill='var(--ink)';n.textContent=o.n+(o.ip?' '+o.ip:'');
+g.appendChild(c);g.appendChild(t);g.appendChild(n);g.style.cursor='pointer';g.onclick=function(){tap(i)};s.appendChild(g)})}
+function tap(i){var d=LV[li].d;
+if(sel===null){sel=i}else if(sel===i){sel=null}else{var a=d[sel],b=d[i];
+if(a.k==='pc'&&b.k==='pc'){msg('Kompyuterni kompyuterga ulab boʻlmaydi. Switch ishlating.','var(--bad)');sel=null;draw();return}
+var f=-1;links.forEach(function(l,j){if((l[0]===sel&&l[1]===i)||(l[0]===i&&l[1]===sel))f=j});
+if(f>-1)links.splice(f,1);else links.push([sel,i]);sel=null;msg('')}
+draw()}
+$('png').onclick=function(){var L=LV[li],d=L.d,par={},q=[L.from];par[L.from]=-1;
+while(q.length){var u=q.shift();links.forEach(function(l){var v=l[0]===u?l[1]:(l[1]===u?l[0]:-1);if(v>-1&&!(v in par)){par[v]=u;q.push(v)}})}
+if(!(L.to in par)){msg('Ping oʻtmadi: qurilmalar oʻzaro ulanmagan.','var(--bad)');return}
+if(L.need&&L.need.some(function(n){return !(n in par)})){msg('Ping oʻtmadi: PC1 ham tarmoqqa ulanishi kerak.','var(--bad)');return}
+var path=[],x=L.to;while(x!==-1){path.push(d[x]);x=par[x]}
+var sub=function(o){return o.ip.split('.').slice(0,3).join('.')};
+if(sub(d[L.from])!==sub(d[L.to])&&!path.some(function(o){return o.k==='rt'})){msg('Ping oʻtmadi: tarmoqlar har xil, router kerak.','var(--bad)');return}
+var last=li>=LV.length-1;
+msg('Ping muvaffaqiyatli! Yoʻl: '+path.reverse().map(function(o){return o.n}).join(' > ')+(last?'. Barcha bosqichlar tugadi!':''),'var(--ok)');
+if(!S.done[li]){S.done[li]=1;addXp(25)}$('nx').hidden=last};
+$('nx').onclick=function(){loadLv(li+1)};
+$('rst').onclick=function(){loadLv(li)};
+loadLv(0);showXp();
+if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}
+</script>
+</body>
+</html>
